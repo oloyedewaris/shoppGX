@@ -71,21 +71,42 @@ const FileUpload = props => {
           <div
             style={{
               display: "flex",
+              position: "relative",
               overflowX: "scroll",
               minWidth: "300px",
-              width: "320px",
+              width: "350px",
               height: "250px",
-              outline: "none"
+              outline: "none",
+              padding: "10px"
             }}
           >
             {Images.map((image, index) => (
-              <div key={index}>
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  position: "relative",
+                  width: "200px",
+                  margin: "5px"
+                }}
+              >
                 <img
-                  style={{ height: "250px", width: "220px" }}
+                  style={{
+                    width: "200px"
+                  }}
                   src={`${url}/${image}`}
                   alt={image}
                 />
-                <DeleteOutlined onClick={() => onDeleteImage(index)} />
+                <DeleteOutlined
+                  style={{
+                    position: "absolute",
+                    fontSize: "20px",
+                    color: "red",
+                    bottom: "10px",
+                    left: "50%"
+                  }}
+                  onClick={() => onDeleteImage(index)}
+                />
               </div>
             ))}
           </div>

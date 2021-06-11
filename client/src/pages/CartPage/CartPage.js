@@ -91,14 +91,14 @@ const CartPage = props => {
     setTotal(total);
   };
 
-  const handleTransaction = () => {
-    const data = {
-      paymentID: "123tbn49i18662uv",
-      location: "Lagos",
-      device: "Windows"
-    };
-    transactionSuccess(data);
-  };
+  // const handleTransaction = () => {
+  //   const data = {
+  //     paymentID: "123tbn49i18662uv",
+  //     location: "Lagos",
+  //     device: "Windows"
+  //   };
+  //   transactionSuccess(data);
+  // };
 
   const transactionSuccess = data => {
     let variables = {
@@ -158,7 +158,7 @@ const CartPage = props => {
                     </h3>
                     <h3>E-mail: {Email}</h3>
                   </Card>
-                  <Button onClick={handleTransaction}>Transaction</Button>
+                  {/* <Button onClick={handleTransaction}>Transaction</Button> */}
                 </div>
               )}
               <div>
