@@ -60,8 +60,28 @@ router.post("/uploadProduct", auth, (req, res) => {
     });
 });
 
-router.get("/getProducts", (req, res) => {
-  Product.find()
+router.post("/getProducts", (req, res) => {
+  const { find } = req.body;
+  let findarg;
+  if (find) {
+    if (typeof find === "string") {
+      findarg = {
+        $text: { $search: find }
+      };
+    }
+    if (find.phone && find.phone.length > 0) {
+      findarg = { phone: find.phone };
+    }
+    if (find.price && find.price.length > 0) {
+      findarg = {
+        price: {
+          $gte: find.price[0],
+          $lte: find.price[1]
+        }
+      };
+    }
+  }
+  Product.find(findarg)
     .exec()
     .then(products => {
       return res.status(200).json({
@@ -70,7 +90,7 @@ router.get("/getProducts", (req, res) => {
       });
     })
     .catch(err => {
-      return res.status(400).json({ success: false });
+      return res.status(400).json({ success: false, err });
     });
 });
 

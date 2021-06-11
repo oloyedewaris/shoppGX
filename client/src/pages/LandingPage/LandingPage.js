@@ -10,6 +10,8 @@ import CheckBox from "./Sections/CheckBox";
 import Radiobox from "./Sections/RadioBox";
 import { Price } from "./Sections/Data";
 import SearchBox from "./Sections/SearchBox";
+import Axios from "axios";
+import { url } from "../../utils/url";
 
 const LandingPage = () => {
   const history = useHistory();
@@ -33,29 +35,17 @@ const LandingPage = () => {
     });
   }, []);
 
-  const showFilterResult = filters => {
-    let newProducts = [];
-    if (filters.phone.length > 0) {
-      filters.phone.forEach(phone => {
-        Products.forEach(product => {
-          if (product.phone === phone) {
-            newProducts.push(product);
-          }
-        });
-      });
-    }
+  const getFilterProducts = filters => {
+    const body = { find: filters };
+    Axios.post(`${url}/api/products/getProducts`, body).then(res => {
+      if (res.data.success) {
+        setProducts(res.data.products);
+      }
+    });
+  };
 
-    if (filters.price.length > 0) {
-      Products.forEach(product => {
-        if (
-          product.price < filters.price[0] &&
-          product.price > filters.price[1]
-        ) {
-          newProducts.push(product);
-        }
-      });
-    }
-    setProducts(newProducts);
+  const showFilterResult = filters => {
+    getFilterProducts(filters);
   };
 
   const handlePrice = value => {
@@ -85,14 +75,8 @@ const LandingPage = () => {
   };
 
   const updateSearch = newSearch => {
-    let newProducts = [];
-
-    Products.forEach(product => {
-      if (product.title === newSearch) {
-        newProducts.push(product);
-      }
-    });
-    setProducts(newProducts);
+    showFilterResult(newSearch);
+    // setProducts(newProducts);
   };
 
   const onAddToCart = productId => {
@@ -114,12 +98,12 @@ const LandingPage = () => {
       <div className="landing">
         <div>
           <Row>
-            <Col lg={12} md={12} sm={12} xs={24} style={{ margin: 10 }}>
+            <Col lg={12} md={12} sm={12} xs={24}>
               <CheckBox
                 handleFilter={filters => handleFilter(filters, "phone")}
               />
             </Col>
-            <Col lg={12} sm={12} md={12} xs={24} style={{ margin: 10 }}>
+            <Col lg={12} sm={12} md={12} xs={24}>
               <Radiobox
                 handleFilter={filters => handleFilter(filters, "price")}
               />

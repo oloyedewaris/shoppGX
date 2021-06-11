@@ -49,11 +49,18 @@ const ProductSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-ProductSchema.index = {
-  title: "text",
-  description: "text"
-};
+ProductSchema.index(
+  {
+    title: "text",
+    phone: "text"
+  },
+  {
+    weights: {
+      title: 5,
+      phone: 1
+    }
+  }
+);
 
 const Product = mongoose.model("Product", ProductSchema);
-Product.createIndexes();
 module.exports = { Product };

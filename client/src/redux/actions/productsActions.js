@@ -18,7 +18,7 @@ export const tokenConfig = {
 
 export const getProducts = () => {
   const request = axios
-    .get(`${url}/api/products/getProducts`)
+    .post(`${url}/api/products/getProducts`)
     .then(res => {
       if (res.data && res.data.success) {
         return res.data;
