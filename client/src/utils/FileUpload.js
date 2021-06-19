@@ -6,15 +6,15 @@ import Axios from "axios";
 import { url } from "./url";
 import { tokenConfig } from "../redux/actions/productsActions";
 
-const FileUpload = props => {
+const FileUpload = (props) => {
   const [Images, setImages] = useState([]);
-  const onDrop = files => {
+  const onDrop = (files) => {
     let formData = new FormData();
     formData.append("file", files[0]);
 
     //Save to node server
     Axios.post(`${url}/api/products/uploadFile`, formData, tokenConfig).then(
-      res => {
+      (res) => {
         if (res.data.success) {
           setImages([...Images, res.data.image]);
           props.refreshFunction([...Images, res.data.image]);
@@ -25,7 +25,7 @@ const FileUpload = props => {
     );
   };
 
-  const onDeleteImage = index => {
+  const onDeleteImage = (index) => {
     let imageArray = [...Images];
     imageArray.splice(index, 1);
 
@@ -52,7 +52,7 @@ const FileUpload = props => {
                   outline: "none",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center"
+                  justifyContent: "center",
                 }}
                 {...getRootProps()}
               >
@@ -77,7 +77,7 @@ const FileUpload = props => {
               width: "350px",
               height: "250px",
               outline: "none",
-              padding: "10px"
+              padding: "3px",
             }}
           >
             {Images.map((image, index) => (
@@ -87,12 +87,11 @@ const FileUpload = props => {
                   display: "flex",
                   position: "relative",
                   width: "200px",
-                  margin: "5px"
                 }}
               >
                 <img
                   style={{
-                    width: "200px"
+                    width: "200px",
                   }}
                   src={`${url}/${image}`}
                   alt={image}
@@ -103,7 +102,7 @@ const FileUpload = props => {
                     fontSize: "20px",
                     color: "red",
                     bottom: "10px",
-                    left: "50%"
+                    left: "50%",
                   }}
                   onClick={() => onDeleteImage(index)}
                 />

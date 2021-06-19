@@ -5,53 +5,51 @@ import {
   ADD_TO_CART,
   REMOVE_CART_ITEM,
   CHANGE_ITEM_QUANTITY,
-  ON_SUCCESS_BUY
+  ON_SUCCESS_BUY,
 } from "./types";
 import { url } from "../../utils/url";
 
 export const tokenConfig = {
   headers: {
     "Content-type": "application/json",
-    g_auth: localStorage.getItem("token")
-  }
+    g_auth: localStorage.getItem("token"),
+  },
 };
 
 export const getProducts = () => {
   const request = axios
     .post(`${url}/api/products/getProducts`)
-    .then(res => {
-      if (res.data && res.data.success) {
-        return res.data;
-      } else {
-        alert("Unable to fetch products");
-      }
+    .then((res) => {
+      return res.data;
     })
-    .catch(err => {
+    .catch((err) => {
+      console.log(err);
       alert("Unable to fetch products");
     });
 
   return {
     type: GET_PRODUCTS,
-    payload: request
+    payload: request,
   };
 };
 
-export const deleteProduct = productId => {
+export const deleteProduct = (productId) => {
   const request = axios
     .delete(
       `${url}/api/products/delete_product?productId=${productId}`,
       tokenConfig
     )
-    .then(response => {
-      if (response.data && response.data.success) {
-        return response.data;
-      }
+    .then((response) => {
+      return response.data;
     })
-    .catch(err => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      alert("unable to delete product");
+    });
 
   return {
     type: DELETE_PRODUCT,
-    payload: request
+    payload: request,
   };
 };
 
@@ -62,18 +60,17 @@ export const addToCart = (productId, body) => {
       body,
       tokenConfig
     )
-    .then(response => {
-      if (response.data && response.data.success) {
-        return response.data;
-      } else {
-        alert("Unable to add product to cart");
-      }
+    .then((response) => {
+      return response.data;
     })
-    .catch(err => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      alert("Unable to add product to cart");
+    });
 
   return {
     type: ADD_TO_CART,
-    payload: request
+    payload: request,
   };
 };
 
@@ -84,54 +81,53 @@ export const removeCartItem = (productId, body) => {
       body,
       tokenConfig
     )
-    .then(response => {
-      if (response.data && response.data.success) {
-        return response.data;
-      } else {
-        alert("unable to remove item from cart");
-      }
+    .then((response) => {
+      return response.data;
     })
-    .catch(err => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      alert("unable to remove item from cart");
+    });
 
   return {
     type: REMOVE_CART_ITEM,
-    payload: request
+    payload: request,
   };
 };
 
-export const changeItemQuantity = dataToSubmit => {
+export const changeItemQuantity = (dataToSubmit) => {
   const request = axios
     .post(
       `${url}/api/products/changeItemQuantity?productId=${dataToSubmit.itemId}`,
       dataToSubmit,
       tokenConfig
     )
-    .then(response => {
-      if (response.data && response.data.success) {
-        return response.data;
-      } else {
-        alert("unable to change item quantity");
-      }
+    .then((response) => {
+      return response.data;
+    })
+    .catch((e) => {
+      console.log(e);
+      alert("unable to change item quantity");
     });
 
   return {
     type: CHANGE_ITEM_QUANTITY,
-    payload: request
+    payload: request,
   };
 };
 
-export const onSuccessBuy = variables => {
+export const onSuccessBuy = (variables) => {
   const request = axios
     .post(`${url}/api/products/successBuy`, variables, tokenConfig)
-    .then(res => {
-      if (res.data && res.data.success) {
-        return res.data;
-      } else {
-        alert("unable to process");
-      }
+    .then((res) => {
+      return res.data;
+    })
+    .catch((e) => {
+      console.log(e);
+      alert("unable to process");
     });
   return {
     type: ON_SUCCESS_BUY,
-    payload: request
+    payload: request,
   };
 };

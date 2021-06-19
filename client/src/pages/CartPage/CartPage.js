@@ -6,17 +6,17 @@ import {
   changeItemQuantity,
   removeCartItem,
   getProducts,
-  onSuccessBuy
+  onSuccessBuy,
 } from "../../redux/actions/productsActions";
 import UserCartBlock from "./Sections/UserCartBlock";
 import PayPal from "../../utils/PayPal";
 
-const CartPage = props => {
+const CartPage = (props) => {
   const dispatch = useDispatch();
 
-  const userData = useSelector(state => state.user.userData);
-  const products = useSelector(state => state.product.products);
-  const userId = useSelector(state => state.user.userId);
+  const userData = useSelector((state) => state.user.userData);
+  const products = useSelector((state) => state.product.products);
+  const userId = useSelector((state) => state.user.userId);
 
   const firstName = userData.firstname;
   const lastName = userData.lastname;
@@ -30,13 +30,13 @@ const CartPage = props => {
 
   useEffect(() => {
     setproductLoading(true);
-    dispatch(getProducts()).then(res => setproductLoading(false));
+    dispatch(getProducts()).then((res) => setproductLoading(false));
   }, []);
 
   useEffect(() => {
     let cart = [];
-    products.forEach(product => {
-      product.cartUsers.forEach(user => {
+    products.forEach((product) => {
+      product.cartUsers.forEach((user) => {
         if (user.userId === userId) {
           cart.push(product);
         }
@@ -54,9 +54,9 @@ const CartPage = props => {
     }
   }, [cart]);
 
-  const removeFromCart = productId => {
+  const removeFromCart = (productId) => {
     const body = {
-      userId
+      userId,
     };
     dispatch(removeCartItem(productId, body));
   };
@@ -67,13 +67,13 @@ const CartPage = props => {
       dataToSubmit = {
         userId,
         change: "decrease",
-        itemId: id
+        itemId: id,
       };
     } else if (data === "plus") {
       dataToSubmit = {
         userId,
         change: "increase",
-        itemId: id
+        itemId: id,
       };
     }
     dispatch(changeItemQuantity(dataToSubmit));
@@ -81,8 +81,8 @@ const CartPage = props => {
 
   const calculateTotal = () => {
     let total = 0;
-    cart.forEach(product => {
-      product.cartUsers.forEach(cartUser => {
+    cart.forEach((product) => {
+      product.cartUsers.forEach((cartUser) => {
         if (cartUser.userId === userId) {
           total += cartUser.quantity * product.price;
         }
@@ -91,23 +91,14 @@ const CartPage = props => {
     setTotal(total);
   };
 
-  // const handleTransaction = () => {
-  //   const data = {
-  //     paymentID: "123tbn49i18662uv",
-  //     location: "Lagos",
-  //     device: "Windows"
-  //   };
-  //   transactionSuccess(data);
-  // };
-
-  const transactionSuccess = data => {
+  const transactionSuccess = (data) => {
     let variables = {
       totalPrice: Total,
       userData,
       boughtProducts: cart,
-      paymentData: data
+      paymentData: data,
     };
-    dispatch(onSuccessBuy(variables)).then(res => {
+    dispatch(onSuccessBuy(variables)).then((res) => {
       if (res.payload.success) {
         setShowSuccess(true);
         dispatch(getProducts());
@@ -135,7 +126,7 @@ const CartPage = props => {
               display: "flex",
               height: "300px",
               justifyContent: "center",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Spin size="large" />
@@ -158,7 +149,6 @@ const CartPage = props => {
                     </h3>
                     <h3>E-mail: {Email}</h3>
                   </Card>
-                  {/* <Button onClick={handleTransaction}>Transaction</Button> */}
                 </div>
               )}
               <div>
