@@ -25,6 +25,7 @@ const { auth } = require("../middleware/auth");
 // });
 
 router.post("/register", (req, res) => {
+  try {
   User.findOne({ email: req.body.email }, (err, existingUser) => {
     if (err)
       return res.status(200).json({ registerSuccess: false, message: err });
@@ -65,9 +66,13 @@ router.post("/register", (req, res) => {
       });
     });
   });
+} catch (Err) {
+  return res.status(400).json({ success: false, err });
+}
 });
 
 router.post("/login", (req, res) => {
+  try {
   User.findOne({ email: req.body.email }, (err, user) => {
     if (!user)
       return res.status(200).json({
@@ -104,9 +109,13 @@ router.post("/login", (req, res) => {
       });
     });
   });
+} catch (err) {
+  return res.status(400).json({ success: false, err });
+}
 });
 
 router.get("/logout", auth, (req, res) => {
+  try {
   User.findOneAndUpdate(
     { _id: req.user._id },
     { $set: { token: "", tokenExp: "" } },
@@ -117,14 +126,21 @@ router.get("/logout", auth, (req, res) => {
       });
     }
   );
+  } catch (err) {
+    return res.status(400).json({ success: false, err });
+  }
 });
 
 router.get("/history", auth, (req, res) => {
+  try {
   History.find({
     "user.id": req.query.userId
   })
     .then(histories => res.status(200).json({ success: true, histories }))
     .catch(err => res.status(400).json({ success: false, message: err }));
+} catch (err) {
+  return res.status(400).json({ success: false, err });
+}
 });
 
 module.exports = router;

@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import { addToCart, getProducts } from "../../redux/actions/productsActions";
 import ImageSlider from "../../components/ImageSlider";
-import CheckBox from "./Sections/CheckBox";
-import Radiobox from "./Sections/RadioBox";
+import CheckBox from "./Sections/Product";
+import Radiobox from "./Sections/Price";
 import { Price } from "./Sections/Data";
 import SearchBox from "./Sections/SearchBox";
 import Axios from "axios";
@@ -21,7 +21,7 @@ const LandingPage = () => {
   const [Products, setProducts] = useState([]);
   const [productLoading, setproductLoading] = useState(false);
   const [Filters, setFilters] = useState({
-    phone: [],
+    product: [],
     price: []
   });
 
@@ -76,7 +76,6 @@ const LandingPage = () => {
 
   const updateSearch = newSearch => {
     showFilterResult(newSearch);
-    // setProducts(newProducts);
   };
 
   const onAddToCart = productId => {
@@ -100,7 +99,7 @@ const LandingPage = () => {
           <Row>
             <Col lg={12} md={12} sm={12} xs={24}>
               <CheckBox
-                handleFilter={filters => handleFilter(filters, "phone")}
+                handleFilter={filters => handleFilter(filters, "product")}
               />
             </Col>
             <Col lg={12} sm={12} md={12} xs={24}>
@@ -121,7 +120,7 @@ const LandingPage = () => {
         </div>
         <div style={{ textAlign: "center" }}>
           <h2>
-            Welcome to My Phone Shop, Explore <RocketOutlined />
+            Welcome to My Laptop Shop, Let's go... <RocketOutlined />
           </h2>
         </div>
         {productLoading ? (
@@ -185,7 +184,7 @@ const LandingPage = () => {
                   alignItems: "center"
                 }}
               >
-                <h4>No Phones Yet</h4>
+                <h4>No Product Yet</h4>
               </div>
             )}
           </div>

@@ -6,24 +6,22 @@ import Axios from "axios";
 import { url } from "../../utils/url";
 import { tokenConfig } from "../../redux/actions/productsActions";
 
-const Phones = [
-  "Select Phone",
-  "Tecno",
-  "Infinix",
-  "Nokia",
-  "Vivo",
-  "Itel",
+const Products = [
+  "Select Laptop",
+  "HP",
+  "Dell",
+  "Lenovo",
+  "Apple",
+  "Acer",
+  "Asus",
   "Samsung",
-  "Oppo",
-  "Redmi",
-  "Iphones"
 ];
 
 const UploadPage = props => {
   const [TitleValue, setTitleValue] = useState("");
   const [PriceValue, setPriceValue] = useState("");
   const [DescriptionValue, setDescriptionValue] = useState("");
-  const [PhoneValue, setPhoneValue] = useState("");
+  const [ProductValue, setProductValue] = useState("");
   const [Images, setImages] = useState([]);
   const userData = useSelector(state => state.user.userData);
 
@@ -39,8 +37,8 @@ const UploadPage = props => {
     setDescriptionValue(e.currentTarget.value);
   };
 
-  const onPhoneChange = e => {
-    setPhoneValue(e.currentTarget.value);
+  const onProductChange = e => {
+    setProductValue(e.currentTarget.value);
   };
 
   const updateImage = image => {
@@ -52,10 +50,10 @@ const UploadPage = props => {
     if (
       !TitleValue ||
       !DescriptionValue ||
-      !PhoneValue ||
+      !ProductValue ||
       !PriceValue ||
       !Images ||
-      PhoneValue === "Select Phone"
+      ProductValue === "Select Laptop"
     )
       return alert("Please enter all fields");
     const product = {
@@ -64,7 +62,7 @@ const UploadPage = props => {
       description: DescriptionValue,
       price: PriceValue,
       images: Images,
-      phone: PhoneValue
+      product: ProductValue
     };
 
     Axios.post(`${url}/api/products/uploadProduct`, product, tokenConfig).then(
@@ -85,7 +83,7 @@ const UploadPage = props => {
   return (
     <div style={{ width: "85%", margin: "3rem auto" }}>
       <div style={{ marginBottom: "5px" }}>
-        <h2>Upload Phone Product</h2>
+        <h2>Upload Product</h2>
         <Form onSubmit={onSubmit}>
           <FileUpload refreshFunction={updateImage} />
           <br />
@@ -106,10 +104,10 @@ const UploadPage = props => {
           <Input onChange={onPriceChange} value={PriceValue} type="number" />
           <br />
           <br />
-          <select className="select" onChange={onPhoneChange}>
-            {Phones.map((phone, i) => (
-              <option key={i} value={phone}>
-                {phone}
+          <select className="select" onChange={onProductChange}>
+            {Products.map((product, i) => (
+              <option key={i} value={product}>
+                {product}
               </option>
             ))}
           </select>

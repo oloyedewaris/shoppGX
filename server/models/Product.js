@@ -3,26 +3,30 @@ const Schema = mongoose.Schema;
 
 const ProductSchema = mongoose.Schema(
   {
-    writer: {
+    author: {
       type: Schema.Types.ObjectId,
       ref: "User"
     },
     title: {
-      type: String
+      type: String,
+      required: true
     },
     description: {
-      type: String
+      type: String,
+      required: true
     },
     price: {
-      type: Number
+      type: Number,
+      required: true
     },
     images: {
       type: Array,
-      default: []
+      default: [],
+      required: true
     },
-    phone: {
+    product: {
       type: String,
-      default: "Tecno"
+      required: true
     },
     cartUsers: {
       type: [
@@ -52,12 +56,12 @@ const ProductSchema = mongoose.Schema(
 ProductSchema.index(
   {
     title: "text",
-    phone: "text"
+    product: "text"
   },
   {
     weights: {
       title: 5,
-      phone: 1
+      product: 1
     }
   }
 );

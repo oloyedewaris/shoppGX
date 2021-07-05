@@ -63,10 +63,10 @@ const History = () => {
                   <strong>Product Name:</strong> {product.name}
                 </p>
                 <p>
-                  <strong>Phone type:</strong> {product.phone}
+                  <strong>Product type:</strong> {product.product}
                 </p>
                 <p>
-                  <strong>Phone Price:</strong> {` $${product.price}`}
+                  <strong>Product Price:</strong> {` $${product.price}`}
                 </p>
                 <p>
                   <strong>Product Quantity:</strong>

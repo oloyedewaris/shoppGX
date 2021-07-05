@@ -14,38 +14,47 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_PRODUCTS:
-      return {
+     if(action.payload && action.payload.products) {
+        return {
         ...state,
         products: action.payload.products
       };
-
+     }
     case DELETE_PRODUCT:
-      return {
+      if(action.payload && action.payload.products) {
+        return {
         ...state,
         products: action.payload.products
       };
+      }
     case ADD_TO_CART:
-      return {
-        ...state,
-        products: action.payload.products
-      };
-
+      if(action.payload && action.payload.products) {
+        return {
+          ...state,
+          products: action.payload.products
+        };
+      }
     case REMOVE_CART_ITEM:
-      return {
-        ...state,
-        products: action.payload.products
-      };
+      if(action.payload && action.payload.products) {
+        return {
+          ...state,
+          products: action.payload.products
+        };
+      }
     case CHANGE_ITEM_QUANTITY:
-      return {
-        ...state,
-        products: action.payload.products
-      };
+      if(action.payload && action.payload.products) {
+        return {
+          ...state,
+          products: action.payload.products
+        };
+      }
     case ON_SUCCESS_BUY:
-      console.log(action.payload.products);
-      return {
-        ...state,
-        products: action.payload.products
-      };
+      if(action.payload && action.payload.products) {
+        return {
+          ...state,
+          products: action.payload.products
+        };
+      }
     default:
       return state;
   }

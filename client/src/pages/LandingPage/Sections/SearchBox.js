@@ -16,7 +16,7 @@ function SearchBox(props) {
         type="text"
         onChange={onSearchInputChange}
         value={SearchInput}
-        placeholder="Search phone... "
+        placeholder="Search laptops... "
       />
     </div>
   );

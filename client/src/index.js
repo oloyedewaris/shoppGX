@@ -14,6 +14,13 @@ import { createStore, applyMiddleware } from "redux";
 import promiseMiddleware from "redux-promise";
 import ReduxThunk from "redux-thunk";
 
+import { ThemeSwitcherProvider } from "react-css-theme-switcher";
+
+const themes = {
+  dark: `${process.env.PUBLIC_URL}/dark-theme.css`,
+  light: `${process.env.PUBLIC_URL}/light-theme.css`,
+};
+
 const createStoreWithMiddleware = applyMiddleware(
   promiseMiddleware,
   ReduxThunk
@@ -29,7 +36,13 @@ ReactDOM.render(
       )}
     >
       <BrowserRouter>
-        <App />
+        <ThemeSwitcherProvider
+          themeMap={themes}
+          defaultTheme="light"
+          insertionPoint="styles-insertion-point"
+        >
+          <App />
+        </ThemeSwitcherProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,

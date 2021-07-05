@@ -40,6 +40,7 @@ const userSchema = mongoose.Schema({
 });
 
 userSchema.pre("save", function(next) {
+  try {
   var user = this;
 
   if (user.isModified("password")) {
@@ -55,16 +56,24 @@ userSchema.pre("save", function(next) {
   } else {
     next();
   }
+} catch (err) {
+  console.log(err)
+}
 });
 
 userSchema.methods.comparePassword = function(plainPassword, cb) {
+  try {
   bcrypt.compare(plainPassword, this.password, function(err, isMatch) {
     if (err) return cb(err);
     cb(null, isMatch);
   });
+} catch (err) {
+  console.log(err)
+}
 };
 
 userSchema.methods.generateToken = function(cb) {
+  try {
   var user = this;
   var token = jwt.sign(user._id.toHexString(), "secret");
   var oneHour = moment()
@@ -77,9 +86,13 @@ userSchema.methods.generateToken = function(cb) {
     if (err) return cb(err);
     cb(null, user);
   });
+} catch (err) {
+  console.log(err)
+}
 };
 
 userSchema.statics.findByToken = function(token, cb) {
+  try {
   var user = this;
 
   jwt.verify(token, "secret", function(err, decode) {
@@ -88,6 +101,9 @@ userSchema.statics.findByToken = function(token, cb) {
       cb(null, user);
     });
   });
+} catch (err) {
+  console.log(err)
+}
 };
 
 const User = mongoose.model("User", userSchema);

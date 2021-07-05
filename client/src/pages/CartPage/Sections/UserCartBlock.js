@@ -17,7 +17,7 @@ function UserCartBlock(props) {
         <div>
           {props.products.map((product, i) => {
             product.cartUsers.forEach(user => {
-              if (user.userId == userId) {
+              if (user.userId === userId) {
                 quantity = user.quantity;
               }
             });

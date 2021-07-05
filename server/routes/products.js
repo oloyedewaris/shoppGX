@@ -29,7 +29,8 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage }).single("file");
 
 router.post("/uploadFile", auth, (req, res) => {
-  upload(req, res, (err) => {
+ try {
+    upload(req, res, (err) => {
     if (err) return res.json({ success: false, err });
     return res.json({
       success: true,
@@ -37,14 +38,18 @@ router.post("/uploadFile", auth, (req, res) => {
       fileName: res.req.file.filename,
     });
   });
+ } catch (err) {
+   return res.json({ success: false, err });
+ }
 });
 
 router.post("/uploadProduct", auth, (req, res) => {
-  const { writer, description, phone, images, title, price } = req.body;
+  try {
+    const { writer, description, product, images, title, price } = req.body;
   const newProduct = new Product({
     writer,
     description,
-    phone,
+    product,
     cartUsers: [],
     images,
     title,
@@ -58,9 +63,13 @@ router.post("/uploadProduct", auth, (req, res) => {
     .catch((err) => {
       return res.status(400).json({ success: false, err });
     });
+  } catch (err) {
+    return res.status(400).json({ success: false, err });
+  }
 });
 
 router.post("/getProducts", (req, res) => {
+  try {
   const { find } = req.body;
   let findarg;
   if (find) {
@@ -69,8 +78,8 @@ router.post("/getProducts", (req, res) => {
         $text: { $search: find },
       };
     }
-    if (find.phone && find.phone.length > 0) {
-      findarg = { phone: find.phone };
+    if (find.product && find.product.length > 0) {
+      findarg = { product: find.product };
     }
     if (find.price && find.price.length > 0) {
       findarg = {
@@ -92,9 +101,13 @@ router.post("/getProducts", (req, res) => {
     .catch((err) => {
       return res.status(400).json({ success: false, err });
     });
+  } catch (err) {
+    return res.status(400).json({ success: false, err });
+  }
 });
 
 router.get("/product_by_id", (req, res) => {
+  try {
   let productId = req.query.productId;
 
   Product.updateOne(
@@ -113,9 +126,13 @@ router.get("/product_by_id", (req, res) => {
     .exec()
     .then((product) => res.status(200).json({ success: true, product }))
     .catch((err) => res.status(400).json({ success: false, err }));
+  } catch (err) {
+    return res.status(400).json({ success: false, err });
+  }
 });
 
 router.post("/addToCart", auth, (req, res) => {
+  try {
   const productId = req.query.productId;
 
   const { userFirstName, userLastName, userEmail, userId } = req.body;
@@ -185,9 +202,13 @@ router.post("/addToCart", auth, (req, res) => {
       );
     }
   });
+} catch (err) {
+  return res.status(400).json({ success: false, err });
+}
 });
 
 router.post("/changeItemQuantity", auth, (req, res) => {
+  try {
   productId = req.query.productId;
   const { userId } = req.body;
 
@@ -256,9 +277,13 @@ router.post("/changeItemQuantity", auth, (req, res) => {
       }
     );
   }
+} catch (err) {
+  return res.status(400).json({ success: false, err });
+}
 });
 
 router.post("/removeCartItem", auth, (req, res) => {
+  try {
   const productId = req.query.productId;
   const { userId } = req.body;
   Product.findOneAndUpdate(
@@ -281,9 +306,13 @@ router.post("/removeCartItem", auth, (req, res) => {
         .catch((err) => res.status(400).json({ success: false, message: err }));
     }
   );
+  } catch (err) {
+    return res.status(400).json({ success: false, err });
+  }
 });
 
 router.delete("/delete_product", auth, (req, res) => {
+  try {
   Product.findByIdAndRemove(req.query.productId)
     .exec()
     .then((product) => {
@@ -292,9 +321,13 @@ router.delete("/delete_product", auth, (req, res) => {
         .then((products) => res.status(200).json({ success: true, products }));
     })
     .catch((err) => res.status(400).json({ success: false, err }));
+  } catch (err) {
+    return res.status(400).json({ success: false, err });
+  }
 });
 
 router.post("/successBuy", auth, (req, res) => {
+  try {
   //Converting javascript date to human understandable
   const d = new Date();
   const months = [
@@ -323,13 +356,12 @@ router.post("/successBuy", auth, (req, res) => {
   boughtProducts.forEach((product) => {
     product.cartUsers.forEach((user) => {
       if (user.userId === userData._id) {
-        console.log(user.quantity);
         productData.push({
           quantity: user.quantity,
           name: product.title,
           id: product._id,
           price: product.price,
-          phone: product.phone,
+          product: product.product,
         });
       }
     });
@@ -390,6 +422,9 @@ router.post("/successBuy", auth, (req, res) => {
       .then((products) => res.status(200).json({ success: true, products }))
       .catch((err) => res.status(400).json({ success: false, message: err }));
   });
+} catch (err) {
+  return res.status(400).json({ success: false, err });
+}
 });
 
 module.exports = router;

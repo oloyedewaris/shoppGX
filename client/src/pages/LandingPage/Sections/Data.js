@@ -31,18 +31,17 @@ const Price = [
     },
   ];
 
-  const Phones = [
-    "Tecno",
-    "Infinix",
-    "Nokia",
-    "Vivo",
-    "Itel",
+  const Products = [
+    "HP",
+    "Dell",
+    "Lenovo",
+    "Apple",
+    "Acer",
+    "Asus",
     "Samsung",
-    "Oppo",
-    "Redmi",
-    "Iphones",
   ];
+
   export  {
       Price,
-      Phones
+      Products
   }

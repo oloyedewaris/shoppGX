@@ -15,7 +15,7 @@ function Radiobox(props) {
 
   return (
     <div>
-      <Collapse defaultActiveKey={["0"]}>
+      <Collapse>
         <Panel header="Price" key="1">
           <Radio.Group onChange={handleChange} value={Value}>
             {Price.map(price => (
