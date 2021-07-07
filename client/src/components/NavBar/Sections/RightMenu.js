@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logoutUser } from "../../../redux/actions/userActions";
 
-const RightMenu = props => {
+const RightMenu = ({ mode, onClose }) => {
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
 
@@ -16,30 +16,27 @@ const RightMenu = props => {
 
   if (user.isAuth) {
     return (
-      <Menu mode={props.mode}>
-        <Menu.Item>Welcome, {`${user.userData.firstname}`}</Menu.Item>
-        {user.isAdmin && (
-          <Menu.Item key="upload">
-            <Link to="/product/upload">
-              <UploadOutlined style={{ fontSize: "21px", marginBottom: 4 }} />
-            </Link>
-          </Menu.Item>
-        )}
-        <Menu.Item key="history">
+      <Menu mode={mode}>
+        <Menu.Item key="upload" onClick={onClose}>
+          <Link to="/product/upload">
+            <UploadOutlined style={{ fontSize: "21px", marginBottom: 4 }} />
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="history" onClick={onClose}>
           <Link to="/history">Order History</Link>
         </Menu.Item>
-        <Menu.Item key="logout">
+        <Menu.Item key="logout" onClick={onClose}>
           <a onClick={logoutHandler}>Logout</a>
         </Menu.Item>
       </Menu>
     );
   } else {
     return (
-      <Menu mode={props.mode}>
-        <Menu.Item key="login">
+      <Menu mode={mode}>
+        <Menu.Item key="login" onClick={onClose}>
           <Link to="/login">Signin</Link>
         </Menu.Item>
-        <Menu.Item key="register">
+        <Menu.Item key="register" onClick={onClose}>
           <Link to="/register">Signup</Link>
         </Menu.Item>
       </Menu>

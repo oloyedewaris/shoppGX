@@ -4,20 +4,20 @@ import { Link } from "react-router-dom";
 
 const SubMenu = Menu.SubMenu;
 
-const LeftMenu = props => {
+const LeftMenu = ({mode, onClose}) => {
   return (
-    <Menu mode={props.mode}>
-      <Menu.Item>
+    <Menu mode={mode}>
+      <Menu.Item onClick={onClose}>
         <Link to="/">Home</Link>
       </Menu.Item>
       <SubMenu title={<span>More</span>}>
-        <Menu.Item>
+        <Menu.Item onClick={onClose}>
           <Link to="/contact">Contact</Link>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item onClick={onClose}>
           <Link to="/about">About</Link>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item onClick={onClose}>
           <a
             target="_blank"
             rel="noopener noreferrer"

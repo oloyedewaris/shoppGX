@@ -81,8 +81,8 @@ const UploadPage = props => {
   const { TextArea } = Input;
 
   return (
-    <div style={{ width: "85%", margin: "3rem auto" }}>
-      <div style={{ marginBottom: "5px" }}>
+    <div>
+      <div style={{ marginBottom: "5px", width: "85%", margin: "3rem auto" }}>
         <h2>Upload Product</h2>
         <Form onSubmit={onSubmit}>
           <FileUpload refreshFunction={updateImage} />

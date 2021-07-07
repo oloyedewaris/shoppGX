@@ -28,7 +28,11 @@ app.use("/api/users", require("./routes/users"));
 app.use("/api/products", require("./routes/products"));
 
 //use this to show the image you have in node js server to client (react js)
-app.use("/uploads", express.static("uploads"));
+if (process.env.NODE_ENV === "production") {
+  app.use("/uploads", express.static("uploads"));
+} else {
+  app.use("/uploads-client", express.static("uploads"));
+}
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {

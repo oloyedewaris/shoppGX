@@ -24,11 +24,14 @@ const LandingPage = () => {
     product: [],
     price: []
   });
+  const [productSize, setProductSize] = useState(0)
+  const [limit, setLimit] = useState(8)
 
   useEffect(() => {
     setproductLoading(true);
     dispatch(getProducts()).then(res => {
       if (res.payload) {
+        setProductSize(res.payload.products.length)
         setProducts(res.payload.products);
         setproductLoading(false);
       }
@@ -37,9 +40,11 @@ const LandingPage = () => {
 
   const getFilterProducts = filters => {
     const body = { find: filters };
+    setproductLoading(true)
     Axios.post(`${url}/api/products/getProducts`, body).then(res => {
       if (res.data.success) {
         setProducts(res.data.products);
+        setproductLoading(false)
       }
     });
   };
@@ -92,6 +97,8 @@ const LandingPage = () => {
     }
   };
 
+  const displayProduct = Products.filter((product, i) => (i < limit))
+
   return (
     <div style={{ display: "block" }}>
       <div className="landing">
@@ -138,7 +145,7 @@ const LandingPage = () => {
           <div>
             {Products && Products.length > 0 ? (
               <Row gutter={[16, 16]}>
-                {Products.map((product, index) => (
+                {displayProduct.map((product, index) => (
                   <Col key={index} lg={6} md={6} sm={8} xs={12}>
                     <Card
                       hoverable={true}
@@ -189,7 +196,13 @@ const LandingPage = () => {
             )}
           </div>
         )}
-        <div></div>
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}><Button onClick={() => {
+          if (productSize > limit) {
+            setLimit(limit + 8)
+          } else {
+            setLimit(8)
+          }
+        }}>{productSize > limit ? "Load More" : "Show Less"}</Button></div>
       </div>
     </div>
   );

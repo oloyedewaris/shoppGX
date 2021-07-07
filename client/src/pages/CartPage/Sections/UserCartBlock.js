@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Empty } from "antd";
+import { Card, Empty, Button } from "antd";
 import { useSelector } from "react-redux";
 import { DeleteTwoTone, PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import { url } from "../../../utils/url";
@@ -27,22 +27,25 @@ function UserCartBlock(props) {
                 style={{ width: 350, margin: 15, padding: 5 }}
                 hoverable
                 actions={[
-                  <MinusOutlined
-                    key="minus"
-                    style={{ color: "red" }}
-                    onClick={() => props.changeQuantity("minus", product._id)}
-                  />,
+                  <Button onClick={() => props.changeQuantity("minus", product._id)}>
+                    <MinusOutlined
+                      key="minus"
+                      style={{ color: "red" }}
+                    />
+                  </Button>,
                   <h3>{quantity}</h3>,
-                  <PlusOutlined
-                    key="plus"
-                    style={{ color: "green" }}
-                    onClick={() => props.changeQuantity("plus", product._id)}
-                  />,
-                  <DeleteTwoTone
-                    onClick={() => props.removeFromCart(product._id)}
-                    style={{ color: "red" }}
-                    twoToneColor="red"
-                  />
+                  <Button onClick={() => props.changeQuantity("plus", product._id)}>
+                    <PlusOutlined
+                      key="plus"
+                      style={{ color: "green" }}
+                    />
+                  </Button>,
+                  <Button onClick={() => props.removeFromCart(product._id)}>
+                    <DeleteTwoTone
+                      style={{ color: "red" }}
+                      twoToneColor="red"
+                    />
+                  </Button>
                 ]}
                 cover={
                   <img

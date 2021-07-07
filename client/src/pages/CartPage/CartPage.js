@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Result, Row, Col, Card, Button, Spin } from "antd";
+import { Result, Row, Col, Card, Button, Spin, notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -91,6 +91,14 @@ const CartPage = (props) => {
     setTotal(total);
   };
 
+  const openNotification = (placement, message) => {
+    notification.success({
+      message: "Cart Notification",
+      description: `${message}`,
+      placement
+    });
+  };
+
   const transactionSuccess = (data) => {
     let variables = {
       totalPrice: Total,
@@ -106,18 +114,21 @@ const CartPage = (props) => {
         alert("cannot proceed");
       }
     });
+    openNotification("topLeft", "Transaction successful");
   };
 
   const transactionError = () => {
     console.log("Payment Error");
+    openNotification("topLeft", "Transaction Error");
   };
 
   const transactionCancel = () => {
     console.log("Payment Cancelled");
+    openNotification("topLeft", "Transaction was canceled");
   };
 
   return (
-    <div className="cart-page">
+    <div style={{ width: "100%" }} className="cart-page">
       <h1>My Cart</h1>
       <div>
         {productLoading ? (

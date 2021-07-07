@@ -18,12 +18,7 @@ const NavBar = () => {
   const [visible, setVisible] = useState(false);
 
   const [isDarkMode, setIsDarkMode] = React.useState();
-  const { switcher, currentTheme, status, themes } = useThemeSwitcher();
-
-  // Avoid theme change flicker
-  // if (status === "loading") {
-  //   return <h3>Loading...</h3>;
-  // }
+  const { switcher, themes } = useThemeSwitcher();
 
   const toggleTheme = (isChecked) => {
     setIsDarkMode(isChecked);
@@ -59,7 +54,7 @@ const NavBar = () => {
       style={{ position: "fixed", zIndex: 5, width: "100%" }}
     >
       <div className="menu__logo" style={{ marginRight: "7px" }}>
-      <Switch
+        <Switch
           size="small"
           className="switch"
           checked={isDarkMode}
@@ -68,19 +63,17 @@ const NavBar = () => {
           checkedChildren={"🌙"}
         />
         <a href="/">ShopGX</a>
-        {isAuth ? (
-          <Badge
-            className="menu__badge"
-            style={{ marginTop: 15, marginLeft: 25 }}
-            count={cartLength}
-          >
-            <Link to="/cart-page">
-              <ShoppingCartOutlined
-                style={{ fontSize: "25px", marginBottom: 4 }}
-              />
-            </Link>
-          </Badge>
-        ) : null}
+        <Badge
+          className="menu__badge"
+          style={{ marginTop: 15, marginLeft: 25 }}
+          count={cartLength}
+        >
+          <Link to="/cart-page">
+            <ShoppingCartOutlined
+              style={{ fontSize: "25px", marginBottom: 4 }}
+            />
+          </Link>
+        </Badge>
       </div>
       <div className="menu__container">
         <div className="menu_left">
@@ -97,6 +90,7 @@ const NavBar = () => {
           <MenuFoldOutlined type="align-right" />
         </Button>
         <Drawer
+          width="50%"
           title="shopGX"
           placement="right"
           className="menu_drawer"
@@ -104,8 +98,8 @@ const NavBar = () => {
           onClose={onClose}
           visible={visible}
         >
-          <LeftMenu mode="inline" />
-          <RightMenu mode="inline" />
+          <LeftMenu mode="inline" onClose={onClose} />
+          <RightMenu mode="inline" onClose={onClose} />
         </Drawer>
       </div>
     </nav>
