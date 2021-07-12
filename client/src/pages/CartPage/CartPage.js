@@ -128,70 +128,72 @@ const CartPage = (props) => {
   };
 
   return (
-    <div style={{ width: "100%" }} className="cart-page">
-      <h1>My Cart</h1>
-      <div>
-        {productLoading ? (
-          <div
-            style={{
-              display: "flex",
-              height: "300px",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Spin size="large" />
-          </div>
-        ) : (
-          <Row gutter={[16, 16]}>
-            <Col lg={16} sm={24} md={14} xs={24}>
-              <UserCartBlock
-                removeFromCart={removeFromCart}
-                changeQuantity={changeQuantity}
-                products={cart}
-              />
-            </Col>
-            <Col lg={8} sm={24} md={10} xs={24}>
-              {cart.length > 0 && (
+    <div style={{ width: "100%" }}>
+      <div style={{ width: "80%" }} className="cart-page">
+        <h1>My Cart</h1>
+        <div>
+          {productLoading ? (
+            <div
+              style={{
+                display: "flex",
+                height: "300px",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Spin size="large" />
+            </div>
+          ) : (
+            <Row gutter={[16, 16]}>
+              <Col lg={16} sm={24} md={14} xs={24}>
+                <UserCartBlock
+                  removeFromCart={removeFromCart}
+                  changeQuantity={changeQuantity}
+                  products={cart}
+                />
+              </Col>
+              <Col lg={8} sm={24} md={10} xs={24}>
+                {cart.length > 0 && (
+                  <div>
+                    <Card title="Order Summary">
+                      <h3>
+                        Name: {firstName}, {lastName}
+                      </h3>
+                      <h3>E-mail: {Email}</h3>
+                    </Card>
+                  </div>
+                )}
                 <div>
-                  <Card title="Order Summary">
-                    <h3>
-                      Name: {firstName}, {lastName}
-                    </h3>
-                    <h3>E-mail: {Email}</h3>
-                  </Card>
-                </div>
-              )}
-              <div>
-                {ShowTotal && (
-                  <div>
-                    <div style={{ marginTop: "auto 3rem" }}>
-                      <h2>Total Amount: ${Total} </h2>
+                  {ShowTotal && (
+                    <div>
+                      <div style={{ marginTop: "auto 3rem" }}>
+                        <h2>Total Amount: ${Total} </h2>
+                      </div>
+                      <PayPal
+                        toPay={Total}
+                        transactionSuccess={transactionSuccess}
+                        transactionError={transactionError}
+                        transactionCancel={transactionCancel}
+                      />
                     </div>
-                    <PayPal
-                      toPay={Total}
-                      transactionSuccess={transactionSuccess}
-                      transactionError={transactionError}
-                      transactionCancel={transactionCancel}
-                    />
-                  </div>
-                )}
-                {ShowSuccess && (
-                  <div>
-                    <Result
-                      status="success"
-                      title="Successfully Purchased Items"
-                    />
-                    <p style={{ textAlign: "center" }}>
-                      You can check <Link to="/history">history</Link> for
-                      information about your payment
-                    </p>
-                  </div>
-                )}
-              </div>
-            </Col>
-          </Row>
-        )}
+                  )}
+                  {ShowSuccess && (
+                    <div>
+                      <Result
+                        status="success"
+                        title="Successfully Purchased Items"
+                      />
+                      <p style={{ textAlign: "center" }}>
+                        You can check <Link to="/history">history</Link> for
+                        information about your payment
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </Col>
+            </Row>
+          )}
+        </div>
       </div>
     </div>
   );

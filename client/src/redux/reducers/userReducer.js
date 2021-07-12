@@ -7,7 +7,7 @@ const initialState = {
   userData: {}
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case REGISTER_USER:
       if (action.payload && action.payload.registerSuccess) {
@@ -38,6 +38,8 @@ export default function(state = initialState, action) {
     case LOGOUT_USER:
       localStorage.removeItem("token");
       localStorage.removeItem("tokenExp");
+      localStorage.removeItem("sh-email");
+      localStorage.removeItem("sh-password");
       return {
         ...state,
         logoutSuccess: action.payload.success,

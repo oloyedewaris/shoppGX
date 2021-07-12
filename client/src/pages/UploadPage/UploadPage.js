@@ -65,7 +65,7 @@ const UploadPage = props => {
       product: ProductValue
     };
 
-    Axios.post(`${url}/api/products/uploadProduct`, product, tokenConfig).then(
+    Axios.post(`${url}/api/products/upload_product`, product, tokenConfig).then(
       res => {
         if (res.data.success) {
           alert("Successfully Upload Product");

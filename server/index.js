@@ -31,7 +31,7 @@ app.use("/api/products", require("./routes/products"));
 if (process.env.NODE_ENV === "production") {
   app.use("/uploads", express.static("uploads"));
 } else {
-  app.use("/uploads-client", express.static("uploads"));
+  app.use("/uploads-client", express.static("uploads-client"));
 }
 
 // Serve static assets if in production

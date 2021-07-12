@@ -79,13 +79,14 @@ const RegisterPage = props => {
       setError("Password must be at least 6 character");
     } else {
       let dataToSubmit = {
-        email: email,
-        password: password,
+        email,
+        password,
         firstname: firstName,
         lastname: lastName,
         image: `http://gravatar.com/avatar/${moment().unix()}?d=identicon`
       };
-
+      localStorage.setItem("sh-email", email);
+      localStorage.setItem("sh-password", password);
       dispatch(registerUser(dataToSubmit)).then(response => {
         setisSubmiting(false);
         if (response.payload) {

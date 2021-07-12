@@ -34,6 +34,8 @@ const LoginPage = props => {
 
     if (email && password) {
       if (password.length >= 6) {
+        localStorage.setItem("sh-email", email);
+        localStorage.setItem("sh-password", password);
         dispatch(loginUser(dataToSubmit))
           .then(response => {
             if (response.payload) {

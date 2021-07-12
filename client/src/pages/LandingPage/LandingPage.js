@@ -41,7 +41,7 @@ const LandingPage = () => {
   const getFilterProducts = filters => {
     const body = { find: filters };
     setproductLoading(true)
-    Axios.post(`${url}/api/products/getProducts`, body).then(res => {
+    Axios.post(`${url}/api/products/get_products`, body).then(res => {
       if (res.data.success) {
         setProducts(res.data.products);
         setproductLoading(false)

@@ -18,7 +18,7 @@ export const tokenConfig = {
 
 export const getProducts = () => {
   const request = axios
-    .post(`${url}/api/products/getProducts`)
+    .post(`${url}/api/products/get_products`)
     .then((res) => {
       return res.data;
     })
@@ -56,7 +56,7 @@ export const deleteProduct = (productId) => {
 export const addToCart = (productId, body) => {
   const request = axios
     .post(
-      `${url}/api/products/addToCart?productId=${productId}`,
+      `${url}/api/products/add_to_cart?productId=${productId}`,
       body,
       tokenConfig
     )
@@ -77,7 +77,7 @@ export const addToCart = (productId, body) => {
 export const removeCartItem = (productId, body) => {
   const request = axios
     .post(
-      `${url}/api/products/removeCartItem?productId=${productId}`,
+      `${url}/api/products/remove_cart_item?productId=${productId}`,
       body,
       tokenConfig
     )
@@ -98,7 +98,7 @@ export const removeCartItem = (productId, body) => {
 export const changeItemQuantity = (dataToSubmit) => {
   const request = axios
     .post(
-      `${url}/api/products/changeItemQuantity?productId=${dataToSubmit.itemId}`,
+      `${url}/api/products/change_item_quantity?productId=${dataToSubmit.itemId}`,
       dataToSubmit,
       tokenConfig
     )
@@ -118,7 +118,7 @@ export const changeItemQuantity = (dataToSubmit) => {
 
 export const onSuccessBuy = (variables) => {
   const request = axios
-    .post(`${url}/api/products/successBuy`, variables, tokenConfig)
+    .post(`${url}/api/products/success_buy`, variables, tokenConfig)
     .then((res) => {
       return res.data;
     })

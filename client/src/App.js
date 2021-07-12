@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-import {useSelector} from "react-redux";
 import LandingPage from "./pages/LandingPage/LandingPage.js";
 import LoginPage from "./pages/LoginPage/LoginPage.js";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.js";
@@ -12,28 +11,22 @@ import CartPage from "./pages/CartPage/CartPage";
 import History from "./components/History/History";
 import About from "./components/About";
 import Contact from "./components/Contact";
+import auth from "./hoc/auth"
 
 const App = () => {
-  const isAuth= useSelector(state=> state.user.isAuth);
 
   return (
     <>
       <NavBar />
       <div style={{ paddingTop: "69px", minHeight: "calc(100vh - 80px)" }}>
         <Switch>
-          <Route exact path="/" component={LandingPage} />
+          <Route exact path="/" component={auth(LandingPage)} />
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/register" component={RegisterPage} />
-          <Route exact path="/product/upload" component={UploadPage} />
+          <Route exact path="/product/upload" component={auth(UploadPage)} />
           <Route exact path="/product/:productId" component={DetailsPage} />
-          <Route render={() => 
-              isAuth ? (
-                <CartPage/>
-              ) : (
-                <Redirect to="/login" />
-              )
-            } exact path="/cart-page" />
-          <Route exact path="/history" component={History} />
+          <Route exact path="/cart-page" component={auth(CartPage)} />
+          <Route exact path="/history" component={auth(History)} />
           <Route exact path="/about" component={About} />
           <Route exact path="/contact" component={Contact} />
         </Switch>

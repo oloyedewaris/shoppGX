@@ -1,38 +1,48 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
-import { auth } from "../Flux/actions/userActions";
+import { Spin } from "antd"
 import { useSelector, useDispatch } from "react-redux";
+import { loginUser } from "../redux/actions/userActions";
+import LandingPage from "../pages/LandingPage/LandingPage";
 
-export default function (SpecificComponent, option, adminRoute = null) {
-  function AuthenticationCheck(props) {
-    let user = useSelector(state => state.user);
+
+function Auth(Component) {
+  const AuthenticationCheck = () => {
     const dispatch = useDispatch();
-
+    const isAuth = useSelector(state => state.user.isAuth);
+    const email = localStorage.getItem("sh-email");
+    const password = localStorage.getItem("sh-password");
     useEffect(() => {
-      //To know my current status, send Auth request
-      dispatch(auth()).then(response => {
-        //Not Loggined in Status
-        if (!response.payload.isAuth) {
-          if (option) {
-            props.history.push("/login");
-          }
-          //Loggined in Status
-        } else {
-          //supposed to be Admin page, but not admin person wants to go inside
-          if (adminRoute && !response.payload.isAdmin) {
-            props.history.push("/");
-          }
-          //Logged in Status, but Try to go into log in page
-          else {
-            if (option === false) {
-              props.history.push("/");
-            }
-          }
-        }
-      });
+      if (!isAuth && email && password) {
+        dispatch(loginUser({ email, password }));
+      }
     }, []);
 
-    return <SpecificComponent {...props} user={user} />;
-  }
+    if (isAuth) {
+      return <Component />;
+    } else {
+      if (email && password) {
+        if (isAuth) {
+          return <Component />;
+        } else {
+          return (
+            <div style={{
+              display: "flex",
+              height: "300px",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: 30
+            }}>
+              <Spin size="large" />
+              <h2>Loading previous user</h2>
+            </div>
+          );
+        }
+      } else {
+        return <LandingPage />;
+      }
+    }
+  };
   return AuthenticationCheck;
 }
+
+export default Auth;

@@ -13,7 +13,7 @@ const FileUpload = (props) => {
     formData.append("file", files[0]);
 
     //Save to node server
-    Axios.post(`${url}/api/products/uploadFile`, formData, tokenConfig).then(
+    Axios.post(`${url}/api/products/upload_file`, formData, tokenConfig).then(
       (res) => {
         if (res.data.success) {
           setImages([...Images, res.data.image]);
