@@ -1,4 +1,4 @@
-import { LOGIN_USER, REGISTER_USER, LOGOUT_USER } from "../actions/types";
+import { LOGIN_USER, REGISTER_USER, LOGOUT_USER, SAVE_PRODUCT } from "../actions/types";
 
 const initialState = {
   isAuth: false,
@@ -48,6 +48,13 @@ export default function (state = initialState, action) {
         isAdmin: false,
         userData: {}
       };
+    case SAVE_PRODUCT:
+      if (action.payload && action.payload.success) {
+        return {
+          ...state,
+          userData: action.payload.userData,
+        };
+      }
     default:
       return state;
   }

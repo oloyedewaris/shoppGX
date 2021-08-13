@@ -5,9 +5,9 @@ import LeftMenu from "./Sections/LeftMenu";
 import RightMenu from "./Sections/RightMenu";
 import { Drawer, Button, Badge, Switch } from "antd";
 import { MenuFoldOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-import { useThemeSwitcher } from "react-css-theme-switcher";
+// import { useThemeSwitcher } from "react-css-theme-switcher";
 import "./Sections/Navbar.css";
-import "../../index.compact.css";
+import "../../index.less";
 
 const NavBar = () => {
   const isAuth = useSelector(state => state.user.isAuth);
@@ -17,13 +17,13 @@ const NavBar = () => {
   const [cartLength, setcartLength] = useState(0);
   const [visible, setVisible] = useState(false);
 
-  const [isDarkMode, setIsDarkMode] = React.useState();
-  const { switcher, themes } = useThemeSwitcher();
+  // const [isDarkMode, setIsDarkMode] = React.useState();
+  // const { switcher, themes } = useThemeSwitcher();
 
-  const toggleTheme = (isChecked) => {
-    setIsDarkMode(isChecked);
-    switcher({ theme: isChecked ? themes.dark : themes.light });
-  };
+  // const toggleTheme = (isChecked) => {
+  //   setIsDarkMode(isChecked);
+  //   switcher({ theme: isChecked ? themes.dark : themes.light });
+  // };
 
 
   useEffect(() => {
@@ -54,14 +54,14 @@ const NavBar = () => {
       style={{ position: "fixed", zIndex: 5, width: "100%" }}
     >
       <div className="menu__logo" style={{ marginRight: "7px" }}>
-        <Switch
+        {/* <Switch
           size="small"
           className="switch"
           checked={isDarkMode}
           onChange={toggleTheme}
           unCheckedChildren={"🌞"}
           checkedChildren={"🌙"}
-        />
+        /> */}
         <a href="/">ShopGX</a>
         <Badge
           className="menu__badge"

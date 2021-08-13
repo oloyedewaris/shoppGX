@@ -1,21 +1,24 @@
 {
-  "name": "shopGXClient",
+  "name": "shopgxclient",
   "version": "1.0.0",
   "description": "an ecommerce app",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "author": "waris",
   "license": "ISC",
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
+    "@craco/craco": "^6.2.0",
     "antd": "^4.15.5",
     "axios": "^0.21.1",
     "core-js": "^3.12.1",
+    "craco-less": "^1.18.0",
+    "customize-cra": "^1.0.0",
     "javascript-time-ago": "^2.3.5",
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",

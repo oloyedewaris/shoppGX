@@ -36,74 +36,81 @@ const userSchema = mongoose.Schema({
   history: {
     type: Array,
     default: []
+  },
+  savedProducts: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product"
+    }],
+    default: []
   }
 });
 
-userSchema.pre("save", function(next) {
+userSchema.pre("save", function (next) {
   try {
-  var user = this;
+    var user = this;
 
-  if (user.isModified("password")) {
-    bcrypt.genSalt(saltRounds, function(err, salt) {
-      if (err) return next(err);
-
-      bcrypt.hash(user.password, salt, function(err, hash) {
+    if (user.isModified("password")) {
+      bcrypt.genSalt(saltRounds, function (err, salt) {
         if (err) return next(err);
-        user.password = hash;
-        next();
+
+        bcrypt.hash(user.password, salt, function (err, hash) {
+          if (err) return next(err);
+          user.password = hash;
+          next();
+        });
       });
-    });
-  } else {
-    next();
+    } else {
+      next();
+    }
+  } catch (err) {
+    console.log(err)
   }
-} catch (err) {
-  console.log(err)
-}
 });
 
-userSchema.methods.comparePassword = function(plainPassword, cb) {
+userSchema.methods.comparePassword = function (plainPassword, cb) {
   try {
-  bcrypt.compare(plainPassword, this.password, function(err, isMatch) {
-    if (err) return cb(err);
-    cb(null, isMatch);
-  });
-} catch (err) {
-  console.log(err)
-}
+    bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
+      if (err) return cb(err);
+      cb(null, isMatch);
+    });
+  } catch (err) {
+    console.log(err)
+  }
 };
 
-userSchema.methods.generateToken = function(cb) {
+userSchema.methods.generateToken = function (cb) {
   try {
-  var user = this;
-  var token = jwt.sign(user._id.toHexString(), "secret");
-  var oneHour = moment()
-    .add(1, "hour")
-    .valueOf();
+    var user = this;
+    var token = jwt.sign(user._id.toHexString(), "secret");
+    var oneHour = moment()
+      .add(1, "hour")
+      .valueOf();
 
-  user.tokenExp = oneHour;
-  user.token = token;
-  user.save(function(err, user) {
-    if (err) return cb(err);
-    cb(null, user);
-  });
-} catch (err) {
-  console.log(err)
-}
-};
-
-userSchema.statics.findByToken = function(token, cb) {
-  try {
-  var user = this;
-
-  jwt.verify(token, "secret", function(err, decode) {
-    user.findOne({ _id: decode, token: token }, function(err, user) {
+    user.tokenExp = oneHour;
+    user.token = token;
+    user.save(function (err, user) {
       if (err) return cb(err);
       cb(null, user);
     });
-  });
-} catch (err) {
-  console.log(err)
-}
+  } catch (err) {
+    console.log(err)
+  }
+};
+
+userSchema.statics.findByToken = function (token, cb) {
+  try {
+    var user = this;
+
+    jwt.verify(token, "secret", function (err, decode) {
+      user.findOne({ _id: decode, token: token }, function (err, user) {
+        if (err) return cb(err);
+        cb(null, user);
+      });
+    });
+  } catch (err) {
+    console.log(err)
+  }
 };
 
 const User = mongoose.model("User", userSchema);

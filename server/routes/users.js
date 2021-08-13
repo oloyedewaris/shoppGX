@@ -58,42 +58,45 @@ router.post("/register", (req, res) => {
 
 router.post("/login", (req, res) => {
   try {
-    User.findOne({ email: req.body.email }, (err, user) => {
-      if (!user)
-        return res.status(200).json({
-          loginSuccess: false,
-          message: "Email not found"
-        });
+    User.findOne({ email: req.body.email })
+      .populate("savedProducts")
+      .then((user) => {
+        if (!user)
+          return res.status(200).json({
+            loginSuccess: false,
+            message: "Email not found"
+          });
 
-      user.comparePassword(req.body.password, (err, isMatch) => {
-        if (!isMatch)
-          return res.json({ loginSuccess: false, message: "Wrong password" });
+        user.comparePassword(req.body.password, (err, isMatch) => {
+          if (!isMatch)
+            return res.json({ loginSuccess: false, message: "Wrong password" });
 
-        user.generateToken((err, user) => {
-          if (err)
-            return res.status(200).json({ loginSuccess: false, message: err });
-          res.status(200).json({
-            tokenExp: user.tokenExp,
-            token: user.token,
-            loginSuccess: true,
-            userId: user._id,
-            userData: {
-              _id: user._id,
-              isAdmin: user.role === 0 ? false : true,
-              isAuth: true,
-              email: user.email,
-              name: user.name,
-              firstname: user.firstname,
-              lastname: user.lastname,
-              role: user.role,
-              image: user.image,
-              cart: user.cart,
-              history: user.history
-            }
+          user.generateToken((err, user) => {
+            if (err)
+              return res.status(200).json({ loginSuccess: false, message: err });
+            res.status(200).json({
+              tokenExp: user.tokenExp,
+              token: user.token,
+              loginSuccess: true,
+              userId: user._id,
+              userData: {
+                _id: user._id,
+                isAdmin: user.role === 0 ? false : true,
+                isAuth: true,
+                email: user.email,
+                name: user.name,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                role: user.role,
+                image: user.image,
+                cart: user.cart,
+                history: user.history,
+                savedProducts: user.savedProducts
+              }
+            })
           });
         });
-      });
-    });
+      })
   } catch (err) {
     return res.status(400).json({ success: false, err });
   }
@@ -123,6 +126,45 @@ router.get("/history", auth, (req, res) => {
     })
       .then(histories => res.status(200).json({ success: true, histories }))
       .catch(err => res.status(400).json({ success: false, message: err }));
+  } catch (err) {
+    return res.status(400).json({ success: false, err });
+  }
+});
+
+router.post("/save_product", auth, (req, res) => {
+  try {
+    if (req.body.action === "save") {
+      User.findOneAndUpdate(
+        { _id: req.body.userId },
+        { $addToSet: { savedProducts: req.body.productId } },
+        (err, user) => {
+          if (err) return res.status(400).json({ success: false, message: err });
+          User
+            .findById(req.body.userId)
+            .populate("savedProducts")
+            .select("-password")
+            .then(user => {
+              return res.status(200).json({ success: true, userData: user })
+            })
+        }
+      )
+    } else if (req.body.action === "unsave") {
+      User.findOneAndUpdate(
+        { _id: req.body.userId },
+        { $pull: { savedProducts: req.body.productId } },
+        (err, user) => {
+          if (err) return res.status(400).json({ success: false, message: err });
+          User
+            .findById(req.body.userId)
+            .populate("savedProducts")
+            .select("-password")
+            .then(user => {
+              return res.status(200).json({ success: true, userData: user })
+            })
+        }
+      )
+    }
+
   } catch (err) {
     return res.status(400).json({ success: false, err });
   }

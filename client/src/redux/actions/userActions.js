@@ -1,6 +1,7 @@
 import axios from "axios";
-import { LOGIN_USER, REGISTER_USER, LOGOUT_USER } from "./types";
+import { LOGIN_USER, REGISTER_USER, LOGOUT_USER, SAVE_PRODUCT } from "./types";
 import { url } from "../../utils/url";
+import { tokenConfig } from "./productsActions";
 
 export function registerUser(dataToSubmit) {
   const request = axios
@@ -36,6 +37,20 @@ export function logoutUser() {
 
   return {
     type: LOGOUT_USER,
+    payload: request
+  };
+}
+
+export function saveProduct(dataToSubmit) {
+  const request = axios
+    .post(`${url}/api/users/save_product`, dataToSubmit, tokenConfig)
+    .then(response => {
+      return response.data
+    })
+    .catch(err => console.log(err));
+
+  return {
+    type: SAVE_PRODUCT,
     payload: request
   };
 }

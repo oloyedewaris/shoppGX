@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Typography, Button, Form, Input } from "antd";
 import { useSelector } from "react-redux";
-import FileUpload from "../../utils/FileUpload";
+import { useHistory } from "react-router-dom";
 import Axios from "axios";
+import FileUpload from "../../utils/FileUpload";
 import { url } from "../../utils/url";
 import { tokenConfig } from "../../redux/actions/productsActions";
 
@@ -24,6 +25,7 @@ const UploadPage = props => {
   const [ProductValue, setProductValue] = useState("");
   const [Images, setImages] = useState([]);
   const userData = useSelector(state => state.user.userData);
+  const history = useHistory();
 
   const onTitleChange = e => {
     setTitleValue(e.currentTarget.value);
@@ -69,7 +71,7 @@ const UploadPage = props => {
       res => {
         if (res.data.success) {
           alert("Successfully Upload Product");
-          props.history.push("/");
+          history.push("/");
         } else {
           alert("Failed to upload product");
         }

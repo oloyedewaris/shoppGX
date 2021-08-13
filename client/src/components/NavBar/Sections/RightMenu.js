@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import { Menu } from "antd";
+import { Menu, Badge } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logoutUser } from "../../../redux/actions/userActions";
 
 const RightMenu = ({ mode, onClose }) => {
+  const savedProducts = useSelector(state => state.user.userData.savedProducts)
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
 
@@ -21,6 +22,11 @@ const RightMenu = ({ mode, onClose }) => {
           <Link to="/product/upload">
             <UploadOutlined style={{ fontSize: "21px", marginBottom: 4 }} />
           </Link>
+        </Menu.Item>
+        <Menu.Item key="saved" onClick={onClose}>
+          <Badge count={savedProducts.length}>
+            <Link to="/saved" >Saved Products</Link>
+          </Badge>
         </Menu.Item>
         <Menu.Item key="history" onClick={onClose}>
           <Link to="/history">Order History</Link>

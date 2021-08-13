@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Spin, Card } from "antd";
+import { Spin, Card, Modal, Button } from "antd";
 import Axios from "axios";
 import { tokenConfig } from "../../redux/actions/productsActions";
 import { url } from "../../utils/url";
@@ -9,6 +9,7 @@ const History = () => {
   const userId = useSelector((state) => state.user.userId);
   const [History, setHistory] = useState([]);
   const [Loading, setLoading] = useState(false);
+  const [order, setOrder] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -22,17 +23,24 @@ const History = () => {
       .catch((err) => alert("Failed to load history"));
   }, []);
 
+  const onOk = () => {
+    setOrder(null)
+  }
+
+  const onCancel = () => {
+    setOrder(null)
+  }
+
   return (
     <div className="cart-page">
       <div style={{ textAlign: "center" }}>
-        <h1>History</h1>
+        <h1>My Orders</h1>
       </div>
       <div>
         {History.map((item, i) => (
-          <Card style={{ margin: "30px 10px", width: "70%" }} hoverable key={i}>
-            <h2>General Info</h2>
+          <Card title="Order" style={{ margin: "30px 10px", width: "70%" }} hoverable key={i}>
             <p>
-              <strong>Payment ID:</strong> {item.paymentId}
+              <strong>Payer Email:</strong> {item.paymentData[0].email}
             </p>
             <p>
               <strong>Total Purchase Price:</strong> {` $${item.totalPrice}`}
@@ -41,41 +49,38 @@ const History = () => {
               <strong>No. of Item Bought:</strong> {item.productData.length}
             </p>
             <p>
-              <strong>Date of Purchase</strong> {item.dateOfPurchase}
+              <strong>Date Purchased</strong> {item.dateOfPurchase}
             </p>
-            <h2>Payment Info</h2>
-            <p>
-              <strong>Payment ID:</strong> {item.paymentData[0].paymentID}
-            </p>
-            <p>
-              <strong>Payer Email:</strong> {item.paymentData[0].email}
-            </p>
-            <p>
-              <strong>Payment Token:</strong> {item.paymentData[0].paymentToken}
-            </p>
-            <p>
-              <strong>Payer ID:</strong> {item.paymentData[0].payerID}
-            </p>
-            <h2>Product Info</h2>
-            {item.productData.map((product, i) => (
-              <div key={i}>
-                <p>
-                  <strong>Product Name:</strong> {product.name}
-                </p>
-                <p>
-                  <strong>Product type:</strong> {product.product}
-                </p>
-                <p>
-                  <strong>Product Price:</strong> {` $${product.price}`}
-                </p>
-                <p>
-                  <strong>Product Quantity:</strong>
-                  {product.quantity}
-                </p>
-              </div>
-            ))}
+            <Button onClick={() => setOrder(item)}>Show Info</Button>
           </Card>
         ))}
+        {order ? <Modal title="Order Receipt" visible={order} onOk={onOk} onCancel={onCancel}>
+          <h2>Payment Info</h2>
+          <p>
+            <strong>Payment ID:</strong> {order.paymentData[0].paymentID}
+          </p>
+          <p>
+            <strong>Payment Token:</strong> {order.paymentData[0].paymentToken}
+          </p>
+          <h2>Items Bought</h2>
+          {order.productData.map((product, i) => (
+            <div style={{ borderBottom: "2px solid gray", borderLeft: "2px solid gray", paddingLeft: "10px", marginBottom: "15px" }} key={i}>
+              <p>
+                <strong>Product Name:</strong> {product.name}
+              </p>
+              <p>
+                <strong>Product type:</strong> {product.product}
+              </p>
+              <p>
+                <strong>Product Price:</strong> {` $${product.price}`}
+              </p>
+              <p>
+                <strong>Product Quantity:</strong>
+                {product.quantity}
+              </p>
+            </div>
+          ))}
+        </Modal> : null}
       </div>
       {Loading ? (
         <div

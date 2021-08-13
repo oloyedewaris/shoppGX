@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Card, Button, Spin } from "antd";
-import { RocketOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { RocketOutlined, HeartOutlined } from "@ant-design/icons";
 import Meta from "antd/lib/card/Meta";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
@@ -12,10 +12,12 @@ import { Price } from "./Sections/Data";
 import SearchBox from "./Sections/SearchBox";
 import Axios from "axios";
 import { url } from "../../utils/url";
+import { saveProduct } from "../../redux/actions/userActions";
 
 const LandingPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const savedProducts = useSelector(state => state.user.userData.savedProducts)
   const userData = useSelector(state => state.user.userData);
   const isAuth = useSelector(state => state.user.isAuth);
   const [Products, setProducts] = useState([]);
@@ -97,7 +99,24 @@ const LandingPage = () => {
     }
   };
 
+  const onSaveProduct = (productId, action) => {
+    if (isAuth) {
+      const cartBody = {
+        userId: userData._id,
+        productId,
+        action
+      };
+      dispatch(saveProduct(cartBody));
+    } else {
+      history.push("/login");
+    }
+  }
+
   const displayProduct = Products.filter((product, i) => (i < limit))
+
+  const findSaved = (productId) => {
+    return savedProducts.find(savedProduct => (savedProduct._id === productId))
+  }
 
   return (
     <div style={{ display: "block" }}>
@@ -170,13 +189,26 @@ const LandingPage = () => {
                       >
                         <Button
                           onClick={() => onAddToCart(product._id)}
-                          style={{ color: "green" }}
                           size="large"
                           shape="round"
                           type="dashed"
                         >
                           Add To Cart
                         </Button>
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                        <HeartOutlined
+                          onClick={() => (
+                            findSaved(product._id) ?
+                              onSaveProduct(product._id, "unsave") :
+                              onSaveProduct(product._id, "save")
+                          )
+                          }
+                          style={{
+                            fontSize: "15px", marginTop: "10px",
+                            color: findSaved(product._id) ? "red" : "black"
+                          }}
+                        />
                       </div>
                     </Card>
                   </Col>
@@ -196,13 +228,13 @@ const LandingPage = () => {
             )}
           </div>
         )}
-        <div style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}><Button onClick={() => {
-          if (productSize > limit) {
-            setLimit(limit + 8)
-          } else {
-            setLimit(8)
-          }
-        }}>{productSize > limit ? "Load More" : "Show Less"}</Button></div>
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}>
+          {productSize > limit ?
+            <Button onClick={() => setLimit(limit + 8)}>
+              Load More
+            </Button> :
+            null}
+        </div>
       </div>
     </div>
   );
