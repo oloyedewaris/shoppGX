@@ -7,7 +7,7 @@ const initialState = {
   userData: {}
 };
 
-export default function (state = initialState, action) {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case REGISTER_USER:
       if (action.payload && action.payload.registerSuccess) {
@@ -21,11 +21,17 @@ export default function (state = initialState, action) {
           isAdmin: action.payload.userData.isAdmin,
           userId: action.payload.userId
         };
+      } else {
+        return {
+          ...state
+        }
       }
     case LOGIN_USER:
       if (action.payload && action.payload.loginSuccess) {
+        console.log(action.payload)
         localStorage.setItem("token", action.payload.token);
         localStorage.setItem("tokenExp", action.payload.tokenExp);
+        localStorage.setItem("sh-email", action.payload.userData?.email);
         return {
           ...state,
           loginSucces: action.payload.loginSucces,
@@ -34,9 +40,13 @@ export default function (state = initialState, action) {
           isAdmin: action.payload.userData.isAdmin,
           userId: action.payload.userId
         };
+      } else {
+        return {
+          ...state
+        }
       }
     case LOGOUT_USER:
-      localStorage.removeItem("token");
+      // localStorage.removeItem("token");
       localStorage.removeItem("tokenExp");
       localStorage.removeItem("sh-email");
       localStorage.removeItem("sh-password");
@@ -54,8 +64,14 @@ export default function (state = initialState, action) {
           ...state,
           userData: action.payload.userData,
         };
+      } else {
+        return {
+          ...state
+        }
       }
     default:
       return state;
   }
 }
+
+export default reducer;

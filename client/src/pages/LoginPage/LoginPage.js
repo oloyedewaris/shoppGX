@@ -17,15 +17,16 @@ const LoginPage = props => {
 
   const handleEmail = e => {
     setEmail(e.target.value);
-    setError(false);
+    setError(null);
   };
 
   const handlePassword = e => {
     setPassword(e.target.value);
-    setError(false);
+    setError(null);
   };
 
   const handleSubmit = () => {
+    setError(null)
     setisSubmiting(true);
     let dataToSubmit = {
       email,
@@ -34,17 +35,13 @@ const LoginPage = props => {
 
     if (email && password) {
       if (password.length >= 6) {
-        localStorage.setItem("sh-email", email);
         localStorage.setItem("sh-password", password);
         dispatch(loginUser(dataToSubmit))
           .then(response => {
             if (response.payload) {
               if (response.payload.loginSuccess) {
                 props.history.push("/");
-              } else if (
-                !response.payload.loginSuccess &&
-                response.payload.message
-              ) {
+              } else if (!response.payload.loginSuccess && response.payload.message) {
                 setError(response.payload.message);
                 setisSubmiting(false);
               } else {
@@ -57,8 +54,8 @@ const LoginPage = props => {
             }
           })
           .catch(err => {
+            setError('something went wrong, please try again');
             setisSubmiting(false);
-            setError(err);
           });
       } else {
         setError("Password must be at least 6 character");

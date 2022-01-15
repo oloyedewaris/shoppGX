@@ -31,8 +31,11 @@ export function loginUser(dataToSubmit) {
 
 export function logoutUser() {
   const request = axios
-    .get(`${url}/api/users/logout`)
-    .then(response => response.data)
+    .get(`${url}/api/users/logout`, tokenConfig)
+    .then(response => {
+      console.log(response.data)
+      return response.data
+    })
     .catch(err => console.log(err));
 
   return {

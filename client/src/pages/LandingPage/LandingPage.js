@@ -115,7 +115,8 @@ const LandingPage = () => {
   const displayProduct = Products.filter((product, i) => (i < limit))
 
   const findSaved = (productId) => {
-    return savedProducts.find(savedProduct => (savedProduct._id === productId))
+    if (isAuth)
+      return savedProducts.find(savedProduct => (savedProduct._id === productId))
   }
 
   return (
@@ -198,12 +199,15 @@ const LandingPage = () => {
                       </div>
                       <div style={{ display: "flex", justifyContent: "flex-end" }}>
                         <HeartOutlined
-                          onClick={() => (
-                            findSaved(product._id) ?
-                              onSaveProduct(product._id, "unsave") :
-                              onSaveProduct(product._id, "save")
-                          )
-                          }
+                          onClick={() => {
+                            if (isAuth) {
+                              findSaved(product._id) ?
+                                onSaveProduct(product._id, "unsave") :
+                                onSaveProduct(product._id, "save")
+                            } else {
+                              history.push("/login");
+                            }
+                          }}
                           style={{
                             fontSize: "15px", marginTop: "10px",
                             color: findSaved(product._id) ? "red" : "black"
